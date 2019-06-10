@@ -1,6 +1,7 @@
 import requests
 import random
 import csv
+import time
 from bs4 import BeautifulSoup
 from fake_useragent import UserAgent
 
@@ -9,7 +10,7 @@ from fake_useragent import UserAgent
 def write_file(car_data):   #TODO - GET FEEDBACK!: may consider writing less often...
     try:
         with open('individual_car_data.csv', 'a') as outfile:   #TODO Data integrity - if fail, how handle duplicates?
-            out_head = ['INDIVIDUAL_URL','AVERAGE_MPG']
+            out_head = ['INDIVIDUAL_URL','AVERAGE_MPG','TIME']
             #TODO Add sorting if default behaviour is not ideal
             sort_by_url_and_mpg = sorted(car_data, key = lambda car_url : (car_url,car_url[1]))
 
@@ -19,11 +20,14 @@ def write_file(car_data):   #TODO - GET FEEDBACK!: may consider writing less oft
             #writer.writeheader()
 
             for row in sort_by_url_and_mpg:
+                '''
                 print("PRINTING ROW!")
                 print(row)
+                '''
                 writer.writerow(
                         {   'INDIVIDUAL_URL'   :    row,
-                            'AVERAGE_MPG'      :    22}
+                            'AVERAGE_MPG'      :    22,
+                            'TIME'             :    time.time()}
                 )
                 #TODO Figure out how to pull individual_mpg's (value of our individual_car_data dictionary!)
 
@@ -50,8 +54,6 @@ def years(model_year_link):
     #NOTE Can move this call to a model/make instead.. depends on implications
     write_file(individual_car_data)
 
-        #TODO store these into array, write array to file!
-
 #Pulls links for every year of the current model and store in array
 def models(car_model_link):
     model_ua = UserAgent()
@@ -62,13 +64,8 @@ def models(car_model_link):
 
     all_model_year_links = [ul.get('data-clickable') for ul in model_uls]
 
-    #print(all_model_year_links)
-
     for model_year_link in all_model_year_links:
         years(model_year_link)
-
-    #TODO RESOLVE: Why are there empty arrays before/after each make?
-
 
 def makes():
     make_ua = UserAgent()
@@ -78,13 +75,8 @@ def makes():
 
     make_divs = make_soup.find_all('div', class_ = "col-sm-12 col-md-12")
 
-    #NOTE do this to get to the second div which contains car model info
-    make_div_container = make_divs[1]
-
     #pull all possible car model page links and store in array
-    all_car_model_links = [atag.get('href') for atag in make_div_container.find_all('a')]
-
-    #print(all_car_model_links)
+    all_car_model_links = [atag.get('href') for atag in make_divs[1].find_all('a')] #make_divs[1] accesses div with model info
 
     for car_model_link in all_car_model_links:
         models(car_model_link)
