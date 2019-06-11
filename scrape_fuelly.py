@@ -5,15 +5,13 @@ import time
 from bs4 import BeautifulSoup
 from fake_useragent import UserAgent
 
-#TODO START HERE: RUN THIS ON CLOUD AND SEE HOW LONG UNTIL YOU GET BLOCKED/HOW BIG DATA WILL BE!!
-
+#TODO get feedback about what to pull from next page of the site, how shall I proceed?
 def write_file(car_data):   #TODO - GET FEEDBACK!: may consider writing less often...
     try:
         with open('individual_car_data.csv', 'a') as outfile:   #TODO Data integrity - if fail, how handle duplicates?
             out_head = ['INDIVIDUAL_URL','AVERAGE_MPG','TIME']
 
             sort_by_url_and_mpg = sorted(car_data.items(), key = lambda car_url : car_url[1])
-            print(sort_by_url_and_mpg)
             writer = csv.DictWriter(outfile, fieldnames=out_head)
             #TODO Decide if you need headings written into file or not, if yes do a check to see
             #     if rows exist...
@@ -47,7 +45,7 @@ def years(model_year_link):
         individual_mpg = result.find('div',class_='vertical-stat').find('strong').text
 
         #Store Individual Car Data into a Dict Where URL is Key and MPG is Value
-        individual_car_data[individual_url]=individual_mpg
+        individual_car_data[individual_url]=individual_mpg #TODO make this take in a list of values later on!
 
     #NOTE For now we will write for every model year, because it's more intuitive...
     #NOTE Can move this call to a model/make instead.. depends on implications
