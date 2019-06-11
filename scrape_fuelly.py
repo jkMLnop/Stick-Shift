@@ -11,9 +11,9 @@ def write_file(car_data):   #TODO - GET FEEDBACK!: may consider writing less oft
     try:
         with open('individual_car_data.csv', 'a') as outfile:   #TODO Data integrity - if fail, how handle duplicates?
             out_head = ['INDIVIDUAL_URL','AVERAGE_MPG','TIME']
-            #TODO Add sorting if default behaviour is not ideal
-            sort_by_url_and_mpg = sorted(car_data, key = lambda car_url : (car_url,car_url[1]))
 
+            sort_by_url_and_mpg = sorted(car_data.items(), key = lambda car_url : car_url[1])
+            print(sort_by_url_and_mpg)
             writer = csv.DictWriter(outfile, fieldnames=out_head)
             #TODO Decide if you need headings written into file or not, if yes do a check to see
             #     if rows exist...
@@ -25,11 +25,10 @@ def write_file(car_data):   #TODO - GET FEEDBACK!: may consider writing less oft
                 print(row)
                 '''
                 writer.writerow(
-                        {   'INDIVIDUAL_URL'   :    row,
-                            'AVERAGE_MPG'      :    22,
+                        {   'INDIVIDUAL_URL'   :    row[0],
+                            'AVERAGE_MPG'      :    row[1],
                             'TIME'             :    time.time()}
                 )
-                #TODO Figure out how to pull individual_mpg's (value of our individual_car_data dictionary!)
 
     except IOError:
         print("I/O ERROR: file not found!") #TODO this error doesnt work.. fix it!
