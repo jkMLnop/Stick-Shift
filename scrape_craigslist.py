@@ -49,8 +49,6 @@ def scrape_by_location(zip_code, city, current_proxy_number, proxy_count, proxy_
         #7) implement boto3 S3 bucket writing functionality
 
     for failed_attempts in range(max_attempts):
-        ip_url = 'http://icanhazip.com'#TODO Remove after test!
-
         #iterate to next proxy once proxy rotation interval has been exceeded
         if request_count >= proxy_rotation_interval:
             if current_proxy_number < (proxy_count - 1):
@@ -58,18 +56,19 @@ def scrape_by_location(zip_code, city, current_proxy_number, proxy_count, proxy_
             elif current_proxy_number == (proxy_count - 1):
                 current_proxy_number = 0
             request_count = 0
-            print("proxy rotation interval exceeded, current proxy number: " + str(current_proxy_number) + " request count reset to: " + str(request_count))
 
         proxy_info = {'http': 'http://'+ proxy_list[current_proxy_number]['ip'] + ':' + proxy_list[current_proxy_number]['port']}
 
         try:    #
-            '''
-            listings_page = requests.get(listings_url,headers={'user-agent':listings_ua.random}, proxies = proxy_info)
-            '''
-            proxy_ip = requests.get(ip_url, proxies = proxy_info, timeout = 5)  #TODO Remove after test!
+            print("attempting to connect to: " + str(listings_url))
+            listings_page = requests.get(listings_url, headers = {'user-agent':listings_ua.random}, proxies = proxy_info, timeout = 5)
+            print("connected successfully: " + str(listings_page))
+
             request_count += 1
-            failed_attempts = 0 #NOTE might change this if we scrape deeper and fail on subsequent pages..
+            failed_attempts = max_attempts #NOTE set failed_attempts to max_attempts so loop terminates instead of making further requests upon successful connection!
             #TODO scraping code goes here!
+
+            break
 
         except: # If error, cycle to next proxy and reset request count for that proxy to 0 TODO make more specific error conditions!!
             if current_proxy_number < (proxy_count - 1):
@@ -83,6 +82,7 @@ def scrape_by_location(zip_code, city, current_proxy_number, proxy_count, proxy_
 
             #TODO Possibly add proxy deletion capacity here
 
+    #TODO Add empty listing/failed connection > 5 handling logic here.. (eg ZIP doesnt exist..)
     print("current proxy number: " + str(current_proxy_number) + " current request count: " + str(request_count))
     return current_proxy_number, request_count #TODO add scraped page data output parameter here
 
@@ -90,8 +90,7 @@ def main():
     proxy_list = import_proxy_list()
     zip_list   = import_zip_list()
     proxy_count = len(proxy_list)
-    current_proxy_number  = 0    #TODO: Can I initialize in the loop?
-    request_count = 0
+    current_proxy_number, request_count = 0, 0    #TODO: Can I initialize in the loop?
 
     #scrapes all listings by zip and write to file (in S3) for every zip in user's range of interest
     for zip_code,city in zip_list.items():
