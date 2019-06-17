@@ -1,6 +1,7 @@
 import requests
 import random
 import csv
+import boto3
 from bs4 import BeautifulSoup
 from fake_useragent import UserAgent
 
@@ -45,8 +46,10 @@ def scrape_by_location(zip_code, city, current_proxy_number, proxy_count, proxy_
     proxy_rotation_interval = 15    #NOTE also arbitrarily set also subject to change
 
     #TODO START HERE:
+        #5) add timestamp and zip code fields
         #6) push to AWS
-        #7) implement boto3 S3 bucket writing functionality
+        #7) run on AWS without issues!
+        #8) implement boto3 S3 bucket writing functionality
 
     for failed_attempts in range(max_attempts):
         #iterate to next proxy once proxy rotation interval has been exceeded
@@ -75,8 +78,6 @@ def scrape_by_location(zip_code, city, current_proxy_number, proxy_count, proxy_
                 #write each entry to listing_info dictionary keyed on post id
                 listing_info[post_id] = {'post_date' : post_date, 'post_url' : post_url, 'post_title' : post_title, 'post_price' : post_price}
 
-            #TODO store to listing_info - make this a return!
-
             print("connected successfully: " + str(listings_page))
 
             request_count += 1
@@ -98,7 +99,7 @@ def scrape_by_location(zip_code, city, current_proxy_number, proxy_count, proxy_
 
     #TODO Add empty listing/failed connection > 5 handling logic here.. (eg ZIP doesnt exist..)
     print("current proxy number: " + str(current_proxy_number) + " current request count: " + str(request_count))
-    return current_proxy_number, request_count, listing_info #TODO add scraped page data output parameter here
+    return current_proxy_number, request_count, listing_info
 
 def write_to_file(listing_info):
     try:
