@@ -115,19 +115,19 @@ def scrape_by_location(zip_code, city, current_proxy_number, proxy_count, proxy_
 def write_to_file(listing_info):
     try:
         with open('recent_gas_prices.csv', 'a') as outfile:
-            out_head = ['STATION_ID','STATION_NAME','STATION_PRICE_REGULAR','STATION_ADRESS','STATION_DISTANCE','STATION_URL','STATION_ZIP','TIMESTAMP']
+            out_head = ['STATION_ZIP','STATION_ID','STATION_NAME','STATION_PRICE_REGULAR','STATION_ADRESS','STATION_DISTANCE','STATION_URL','TIMESTAMP']
 
             writer = csv.DictWriter(outfile, fieldnames=out_head)
 
             for key, values in listing_info.items():
                 writer.writerow(
-                        {   'STATION_ID'            :   key,
+                        {   'STATION_ZIP'           :   values['station_zip'],
+                            'STATION_ID'            :   key,
                             'STATION_NAME'          :   values['station_name'],
                             'STATION_PRICE_REGULAR' :   values['station_price_reg'],
                             'STATION_ADRESS'        :   values['station_address'],
                             'STATION_DISTANCE'      :   values['station_distance'],
                             'STATION_URL'           :   values['station_url'],
-                            'STATION_ZIP'           :   values['station_zip'],
                             'TIMESTAMP'             :   time.time()}
                 )
 
