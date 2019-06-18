@@ -73,9 +73,17 @@ def scrape_by_location(zip_code, city, current_proxy_number, proxy_count, proxy_
                 station_price_reg = indidividual_posting.find_next('span', class_ = "GenericStationListItem__price___3GpKP").string
                 station_address = indidividual_posting.find_next('div', class_ = "GenericStationListItem__address___1VFQ3").get_text(" ")   #NOTE adress broken up by <br/> used get_text to join text segments on a space!
                 station_distance = indidividual_posting.find_next('div', class_ = "StationDistance__distanceContainer___3JFP6").string  #TODO Is this the distance from ZIP... how is it extracted?
-                station_link = indidividual_posting.find_next('div', class_ = "GenericStationListItem__mainInfoColumn___2kuPq GenericStationListItem__column___2Yqh-").find_next('a').get('href')
-                station_id = station_link[(station_link.find('/station/') + 9):]
-                station_url = "https://www.gasbuddy.com" + station_link
+
+                #TODO FIX THIS LATER
+                try:
+                    station_link = indidividual_posting.find_next('div', class_ = "GenericStationListItem__mainInfoColumn___2kuPq GenericStationListItem__column___2Yqh-").find_next('a').get('href')
+                    station_id = station_link[(station_link.find('/station/') + 9):]
+                    station_url = "https://www.gasbuddy.com" + str(station_link)
+                except AttributeError:
+                    station_link = ""
+                    station_id = ""
+                    station_url = ""
+
                 station_zip = zip_code
 
                 #clears last updated for stations where price is not known - TODO possibly exclude these later??
@@ -90,6 +98,7 @@ def scrape_by_location(zip_code, city, current_proxy_number, proxy_count, proxy_
                                             'station_distance'  : station_distance,
                                             'station_url'       : station_url,
                                             'station_zip'       : station_zip}
+                                            #TODO add the station last update field here!
 
                 #print("current station's info: " + str(station_info[station_id]))   #TODO REMOVE FOR PROD
             #print("connected successfully: " + str(prices_page))   #TODO REMOVE FOR PROD
@@ -97,7 +106,7 @@ def scrape_by_location(zip_code, city, current_proxy_number, proxy_count, proxy_
             failed_attempts = max_attempts #NOTE set failed_attempts to max_attempts so loop terminates instead of making further requests upon successful connection!
             break
 
-        except: # If error, cycle to next proxy and reset request count for that proxy to 0 TODO make more specific error conditions!!
+        except Exception as e:  # If error, cycle to next proxy and reset request count for that proxy to 0 TODO make more specific error conditions!!
             if current_proxy_number < (proxy_count - 1):
                 current_proxy_number += 1
             elif current_proxy_number == (proxy_count - 1):
@@ -105,7 +114,7 @@ def scrape_by_location(zip_code, city, current_proxy_number, proxy_count, proxy_
 
             request_count = 0
             failed_attempts += 1
-            print("connection error encountered, rotating to proxy number: " + str(current_proxy_number))   #NOTE might keep for error trapping..
+            print("connection error _" + str(e) + "_ encountered at station link: " +  str(station_link) + " and station id: "+ str(station_last_update) + ", rotating to proxy number: " + str(current_proxy_number))   #NOTE might keep for error trapping..
 
             #TODO Possibly add proxy deletion capacity here
     #TODO Add empty listing/failed connection > 5 handling logic here.. (eg ZIP doesnt exist..)
@@ -115,7 +124,14 @@ def scrape_by_location(zip_code, city, current_proxy_number, proxy_count, proxy_
 def write_to_file(listing_info):
     try:
         with open('recent_gas_prices.csv', 'a') as outfile:
-            out_head = ['STATION_ZIP','STATION_ID','STATION_NAME','STATION_PRICE_REGULAR','STATION_ADRESS','STATION_DISTANCE','STATION_URL','TIMESTAMP']
+            out_head = [    'STATION_ZIP',
+                            'STATION_ID',
+                            'STATION_NAME',
+                            'STATION_PRICE_REGULAR',
+                            'STATION_ADRESS',
+                            'STATION_DISTANCE',
+                            'STATION_URL',
+                            'TIMESTAMP']
 
             writer = csv.DictWriter(outfile, fieldnames=out_head)
 
