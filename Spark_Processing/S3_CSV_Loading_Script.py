@@ -1,8 +1,7 @@
 from pyspark import SparkConf, SparkContext
 from pyspark.sql import SQLContext
 
-#conf = SparkConf().setAppName("building a fuel price data warehouse")
-sc = SparkContext('local','building a fuel price data warehouse')#conf=conf)
+sc = SparkContext('local','building a fuel price data warehouse')
 sqlContext = SQLContext(sc)
 
 # Load data from CSV
