@@ -1,0 +1,89 @@
+from flask import render_template
+from flaskexample import app
+from sqlalchemy import create_engine
+from sqlalchemy_utils import database_exists, create_database
+from flask import request
+import pandas as pd
+import psycopg2
+
+#TODO 1) FIX POST so it works! remove hardcoded zip code
+#TODO 2) Add variable for annual fuel cost + estimated annual distance
+#TODO 3) Add thumbnail image logic upstream and pipe it out
+#TODO 4) Add fuel price dashboard functionality
+#TODO 5) HOW TO CAST FIELDS PROPERLY!!
+
+#TODO REMOVE BEFORE PUSHING TO GITHUB!!!!
+user = 'postgres' #add your username here (same as previous postgreSQL)
+host = '107.20.54.125'
+dbname = 'fuel_consumption'
+password = 'postgres'
+
+db = create_engine('postgresql://%s:%s@%s/%s'%(user,password,host,dbname))
+
+print("engine created")
+
+con = None
+con = psycopg2.connect( host=host,
+                        database=dbname,
+                        user=user,
+                        password = password)
+
+print("psycopg2 connection made")
+
+#TODO (STRETCH) MAKE RESULTS COUNT DYNAMIC FROM A DROPDOWN?
+@app.route('/main_page', methods = ['POST'] )
+def main_page_fancy():
+    if request.method == 'POST':
+        #pull 'zip' from input field and store it
+        #TODO 1) FIX:
+        #location = request.args.get('zip_code')
+        #print("location is: " + str(location))
+        location = 10001    #TODO 1) REMOVE
+        query_gas_on_zip =  """
+                            SELECT * FROM gas_prices_final WHERE zip = '%s' ORDER BY price_regular ASC, distance ASC LIMIT 1;
+                            """ %location
+
+        query_gas_result=pd.read_sql_query(query_gas_on_zip,con)
+        min_local_gas_price = query_gas_result.iloc[0]['price_regular']
+        station_url = query_gas_result.iloc[0]['url']
+        print("best gas price: " + str(min_local_gas_price))
+
+        #TODO (STRETCH GOAL) MAKE QUERY FLEXIBLE ON PRICE AND ON LIMIT AND ON DISTANCE!
+        #NOTE sub-$500 posts appear to be mostly leases
+        sql_query = """
+                    SELECT mpg.make, mpg.model, mpg.year, cl.price AS asking_price,
+                    cl.date AS posting_date,
+                    ROUND((cl.price + ('%.2f'*(12000 / mpg.average_mpgs))),2) AS total_cost_of_ownership,
+                    cl.url
+                    FROM car_listings_final as cl
+                    INNER JOIN car_avg_mpgs as mpg
+                    ON LOWER(cl.make) = LOWER(mpg.make)
+                    AND LOWER(cl.model) = LOWER(mpg.model)
+                    AND cl.model_year = mpg.year
+                    WHERE cl.price > 499
+                    ORDER BY total_cost_of_ownership ASC
+                    LIMIT 10;
+                    """ %min_local_gas_price
+
+        query_results=pd.read_sql_query(sql_query,con)
+        cars = []
+
+        #TODO 5) FIX
+        for i in range(0,query_results.shape[0]):
+            cars.append(dict(   model_year=int(query_results.iloc[i]['year']),\
+                                make=query_results.iloc[i]['make'], \
+                                model=query_results.iloc[i]['model'],\
+                                price=query_results.iloc[i]['asking_price'], \
+                                posting_date=query_results.iloc[i]['posting_date'],\
+                                total_cost_of_ownership=query_results.iloc[i]['total_cost_of_ownership'],\
+                                url=query_results.iloc[i]['url'])),\
+
+            #TODO 3) ADD THUMBNAIL IMAGE URL HERE!!!!
+
+        return render_template('main_page.html',cars=cars)
+
+@app.route('/')
+@app.route('/index')
+@app.route('/landing')
+def landing():
+  return render_template("landing_page.html")
