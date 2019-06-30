@@ -13,10 +13,10 @@ import psycopg2
 #TODO 5) HOW TO CAST FIELDS PROPERLY!!
 
 #TODO REMOVE BEFORE PUSHING TO GITHUB!!!!
-user = 'postgres' #add your username here (same as previous postgreSQL)
+user = '' #add your username here (same as previous postgreSQL)
 host = '107.20.54.125'
 dbname = 'fuel_consumption'
-password = 'postgres'
+password = ''
 
 db = create_engine('postgresql://%s:%s@%s/%s'%(user,password,host,dbname))
 
