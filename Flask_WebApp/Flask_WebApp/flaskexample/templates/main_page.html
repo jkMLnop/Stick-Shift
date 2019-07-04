@@ -38,13 +38,13 @@
      display: block;
      margin-left: auto;
      margin-right: auto;
-     width: 40%;
-     max-width: 40%;
+     width: 60%;
+     max-width: 60%;
    }
  </style>
  <img src="{{ url_for('static', filename='img/stick-shift_logo.PNG') }}" alt="" style="width: 10%; max-width: 10%">
  <h1 class="masthead-heading text-uppercase mb-0 center-text" style="color:black"><b>Stick-Shift</b></h1>
- <h5 class="center-text"><i>Kicking Car Buying Into Overdrive</i></h5>
+ <h5 class="center-text"><i>Kicking Car Buying Into High Gear</i></h5>
  <br></br>
  <body>
 
@@ -53,7 +53,7 @@
     <table class="table table-hover">
       {% for car in cars %}
       <tr>
-        <td><a class="lead" href={{ car['url']}}> <img class="featurette-image img-fluid mx-auto img-thumbnail" src="https://images.craigslist.org/00g0g_8wbWjSoshDY_600x450.jpg"> </a></td>
+        <td><a class="lead" href={{ car['url']}}> <img class="featurette-image img-fluid mx-auto img-thumbnail" src={{ car['thumbnail_url'] }}> </a></td>
         <td>
           <div class="row featurette border">
             <div class="col-md-7">
@@ -62,14 +62,10 @@
                 <h2 class="featurette-heading">{{ car['model_year'] }} {{ car['make']}} {{ car['model'] }}</h2>
                 <p class="lead"> Total Cost of Ownership: </br> ${{car['total_cost_of_ownership']}}</p>
                 <p class="lead"> Asking Price: </br> ${{ car['price'] }} </p>
-                <p class="lead"> Estimated Local Fuel Cost: </br> $500 </p>
-                <!-- <tr><td>{{ car['model_year'] }}</td><td>{{ car['make']}}</td><td>{{ car['model'] }}</td><td>{{ car['price'] }}</td><td>{{ car['posting_date'] }}</td><td>{{ car['total_cost_of_ownership'] }}</td><td>{{ car['url'] }}</td></tr> -->
+                <p class="lead"> Estimated Local Fuel Cost: </br> ${{ car['estimated_fuel_cost'] }} </p>
               </div>
             </div>
           </div>
-        </td>
-        <td>
-          <!-- Put Fuel Consumption Graph Here! -->
         </td>
       </tr>
       {% endfor %}

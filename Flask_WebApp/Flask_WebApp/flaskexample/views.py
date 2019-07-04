@@ -7,16 +7,15 @@ import pandas as pd
 import psycopg2
 
 #TODO 1) FIX POST so it works! remove hardcoded zip code
-#TODO 2) Add variable for annual fuel cost + estimated annual distance
-#TODO 3) Add thumbnail image logic upstream and pipe it out
 #TODO 4) Add fuel price dashboard functionality
 #TODO 5) HOW TO CAST FIELDS PROPERLY!!
+#TODO 6) ADD SQL Injection Prevention!
 
 #TODO REMOVE BEFORE PUSHING TO GITHUB!!!!
-user = '' #add your username here (same as previous postgreSQL)
+user = 'postgres' #add your username here (same as previous postgreSQL)
 host = '107.20.54.125'
 dbname = 'fuel_consumption'
-password = ''
+password = 'postgres'
 
 db = create_engine('postgresql://%s:%s@%s/%s'%(user,password,host,dbname))
 
@@ -39,6 +38,8 @@ def main_page_fancy():
         #location = request.args.get('zip_code')
         #print("location is: " + str(location))
         location = 10001    #TODO 1) REMOVE
+        default_distance = 12000 #Average miles driven / yr
+
         query_gas_on_zip =  """
                             SELECT * FROM gas_prices_final WHERE zip = '%s' ORDER BY price_regular ASC, distance ASC LIMIT 1;
                             """ %location
@@ -49,10 +50,12 @@ def main_page_fancy():
         print("best gas price: " + str(min_local_gas_price))
 
         #TODO (STRETCH GOAL) MAKE QUERY FLEXIBLE ON PRICE AND ON LIMIT AND ON DISTANCE!
-        #NOTE sub-$500 posts appear to be mostly leases
+        #NOTE sub-$500 posts appear to be mostly leases, therefore excluded them!
         sql_query = """
                     SELECT mpg.make, mpg.model, mpg.year, cl.price AS asking_price,
                     cl.date AS posting_date,
+                    cl.thumbnail_url,
+                    mpg.average_mpgs,
                     ROUND((cl.price + ('%.2f'*(12000 / mpg.average_mpgs))),2) AS total_cost_of_ownership,
                     cl.url
                     FROM car_listings_final as cl
@@ -70,15 +73,18 @@ def main_page_fancy():
 
         #TODO 5) FIX
         for i in range(0,query_results.shape[0]):
+            average_mpgs = query_results.iloc[i]['average_mpgs']
+
             cars.append(dict(   model_year=int(query_results.iloc[i]['year']),\
                                 make=query_results.iloc[i]['make'], \
                                 model=query_results.iloc[i]['model'],\
                                 price=query_results.iloc[i]['asking_price'], \
                                 posting_date=query_results.iloc[i]['posting_date'],\
                                 total_cost_of_ownership=query_results.iloc[i]['total_cost_of_ownership'],\
-                                url=query_results.iloc[i]['url'])),\
-
-            #TODO 3) ADD THUMBNAIL IMAGE URL HERE!!!!
+                                url=query_results.iloc[i]['url'],\
+                                thumbnail_url=query_results.iloc[i]['thumbnail_url'],\
+                                estimated_fuel_cost=round((min_local_gas_price*(default_distance/average_mpgs)),2)
+                                ))
 
         return render_template('main_page.html',cars=cars)
 
