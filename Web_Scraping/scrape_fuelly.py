@@ -2,54 +2,29 @@ import requests
 import random
 import csv
 import time
+import psycopg2
 from bs4 import BeautifulSoup
 from fake_useragent import UserAgent
 
-#TODO get feedback about what to pull from next page of the site, how shall I proceed?
-def write_file(car_data):   #TODO - GET FEEDBACK!: may consider writing less often...
-    try:
-        with open('individual_car_data.csv', 'a') as outfile:   #TODO Data integrity - if fail, how handle duplicates?
-            out_head = ['INDIVIDUAL_URL','AVERAGE_MPG','TIME']
+def makes():
+    #begin timing (for ease of benchmarking)
+    start = time.time()
 
-            sort_by_url_and_mpg = sorted(car_data.items(), key = lambda car_url : car_url[1])
-            writer = csv.DictWriter(outfile, fieldnames=out_head)
-            #TODO Decide if you need headings written into file or not, if yes do a check to see
-            #     if rows exist...
-            #writer.writeheader()
+    make_ua = UserAgent()
+    make_url = 'http://www.fuelly.com/car'
+    make_page = requests.get(make_url,headers={'user-agent':make_ua.random})
+    make_soup = BeautifulSoup(make_page.content,'lxml')
 
-            for row in sort_by_url_and_mpg:
-                '''
-                print("PRINTING ROW!")
-                print(row)
-                '''
-                writer.writerow(
-                        {   'INDIVIDUAL_URL'   :    row[0],
-                            'AVERAGE_MPG'      :    row[1],
-                            'TIME'             :    time.time()}
-                )
+    make_divs = make_soup.find_all('div', class_ = "col-sm-12 col-md-12")
 
-    except IOError:
-        print("I/O ERROR: file not found!") #TODO this error doesnt work.. fix it!
+    #pull all possible car model page links and store in array
+    all_car_model_links = [atag.get('href') for atag in make_divs[1].find_all('a')] #make_divs[1] accesses div with model info
 
-def years(model_year_link):
-    individual_car_data = {}
+    for car_model_link in all_car_model_links:
+        models(car_model_link)
 
-    year_ua = UserAgent()
-    year_page = requests.get(model_year_link,headers={'user-agent':year_ua.random})
-    year_soup = BeautifulSoup(year_page.content,'lxml')
-
-    year_ul_container = year_soup.find_all('ul',class_="browse-by-vehicle-display")
-
-    for result in year_ul_container:
-        individual_url = result.get('data-clickable')
-        individual_mpg = result.find('div',class_='vertical-stat').find('strong').text
-
-        #Store Individual Car Data into a Dict Where URL is Key and MPG is Value
-        individual_car_data[individual_url]=individual_mpg #TODO make this take in a list of values later on!
-
-    #NOTE For now we will write for every model year, because it's more intuitive...
-    #NOTE Can move this call to a model/make instead.. depends on implications
-    write_file(individual_car_data)
+    #end timing
+    print("total time: " + str(round(time.time() - start)) + " sec.")
 
 #Pulls links for every year of the current model and store in array
 def models(car_model_link):
@@ -64,18 +39,40 @@ def models(car_model_link):
     for model_year_link in all_model_year_links:
         years(model_year_link)
 
-def makes():
-    make_ua = UserAgent()
-    make_url = 'http://www.fuelly.com/car'
-    make_page = requests.get(make_url,headers={'user-agent':make_ua.random})
-    make_soup = BeautifulSoup(make_page.content,'lxml')
+def years(model_year_link):
+    individual_car_data = {}
 
-    make_divs = make_soup.find_all('div', class_ = "col-sm-12 col-md-12")
+    year_ua = UserAgent()
+    year_page = requests.get(model_year_link,headers={'user-agent':year_ua.random})
+    year_soup = BeautifulSoup(year_page.content,'lxml')
 
-    #pull all possible car model page links and store in array
-    all_car_model_links = [atag.get('href') for atag in make_divs[1].find_all('a')] #make_divs[1] accesses div with model info
+    year_ul_container = year_soup.find_all('ul',class_="browse-by-vehicle-display")
 
-    for car_model_link in all_car_model_links:
-        models(car_model_link)
+    for result in year_ul_container:
+        individual_url = result.get('data-clickable')
+        individual_mpg = result.find('div',class_='vertical-stat').find('strong').text
+        car_info = individual_url.split('/')
+        individual_make = car_info[4]
+        individual_model = car_info[5]
+        individual_year = car_info[6]
+
+        #Store Individual Car Data into a Dict Where URL is Key and MPG is Value
+        individual_car_data[individual_url]={'individual_mpg' : individual_mpg, 'individual_make' : individual_make, 'individual_model' : individual_model, 'individual_year' : individual_year}
+
+    #NOTE For now we will write for every model year, because it's more intuitive...
+    #NOTE Can move this call to a model/make instead.. depends on implications
+    db_write(individual_car_data)
+
+def db_write(car_data):
+    connection = psycopg2.connect(  host='',
+                                    database='',
+                                    user='',
+                                    password = '') #TODO GITIGNORE THIS!
+
+    cursor = connection.cursor()
+
+    for key,values in car_data.items():
+        cursor.execute("INSERT INTO car_mpgs_test(url, mpg, make, model, year) VALUES (%s, %s, %s, %s, %s) ON CONFLICT ON CONSTRAINT car_mpgs_test_pkey DO NOTHING",(key, values['individual_mpg'], values['individual_make'], values['individual_model'], values['individual_year']))
+    connection.commit()
 
 makes()
