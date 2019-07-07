@@ -56,6 +56,20 @@ def years(model_year_link):
         individual_model = car_info[5]
         individual_year = car_info[6]
 
+        #Data Quality Tests
+
+        #filtering out non-numeric mpgs
+        try:
+            float(individual_mpg)
+        except ValueError:
+            print('NON-NUMERIC MPG: ' + individual_mpg +' FOUND AT: ' + individual_url) #TODO UNCOMMENT FOR ACTUAL TEST!
+            continue
+
+        #filtering out non-numeric mpgs
+        if individual_year.isnumeric() == False:
+            print('NON-NUMERIC YEAR: ' + individual_year +' FOUND AT: ' + individual_url) #TODO UNCOMMENT FOR ACTUAL TEST!
+            continue
+
         #Store Individual Car Data into a Dict Where URL is Key and MPG is Value
         individual_car_data[individual_url]={'individual_mpg' : individual_mpg, 'individual_make' : individual_make, 'individual_model' : individual_model, 'individual_year' : individual_year}
 
