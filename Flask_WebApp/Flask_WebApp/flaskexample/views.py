@@ -58,7 +58,7 @@ def main_page_fancy():
                     mpg.average_mpgs,
                     ROUND((cl.price + ('%.2f'*(12000 / mpg.average_mpgs))),2) AS total_cost_of_ownership,
                     cl.url
-                    FROM car_listings_final as cl
+                    FROM car_listings_test as cl
                     INNER JOIN car_avg_mpgs as mpg
                     ON LOWER(cl.make) = LOWER(mpg.make)
                     AND LOWER(cl.model) = LOWER(mpg.model)
