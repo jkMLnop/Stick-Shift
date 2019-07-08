@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!-- TODO Switch to a Grid template for the table so you can clean up front end look! -->
 
 <html lang="en">
  <head>
@@ -60,9 +61,9 @@
               <div class="panel panel-default">
                 <div class="col-md-5"></div>
                 <h2 class="featurette-heading">{{ car['model_year'] }} {{ car['make']}} {{ car['model'] }}</h2>
-                <p class="lead"> Total Cost of Ownership: </br> ${{car['total_cost_of_ownership']}}</p>
-                <p class="lead"> Asking Price: </br> ${{ car['price'] }} </p>
-                <p class="lead"> Estimated Local Fuel Cost: </br> ${{ car['estimated_fuel_cost'] }} </p>
+                <p class="lead"> Car Price: </br> {{ "$%.2f"|format(car['price']|float) }} </p>
+                <p class="lead"> Fuel Cost: </br> {{ "$%.2f"|format(car['estimated_fuel_cost']|float) }} </p>
+                <p class="lead"> Total: </br> {{ "$%.2f"|format(car['total_cost_of_ownership']|float) }} </p>
               </div>
             </div>
           </div>
