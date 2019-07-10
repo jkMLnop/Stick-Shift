@@ -11,6 +11,11 @@ A tool to help car-buyers find the best deals in the country and inform them abo
 
 # Problem:
 
+The average American spent an average of [$1400](https://www.fool.com/investing/2017/01/14/heres-how-much-gasoline-the-average-american-consu.aspx) on gasoline in 2015, and in 2018 would go on to spend an average of [$20,084](https://www.usatoday.com/story/money/cars/2018/11/08/used-car-prices/1928840002/) on the purchase of a pre-owned vehicle. Needless to say car ownership is an expensive endeavor, and buyers often don’t fully realize the costs of owning and driving a particular car until after they have already taken the leap and bought a vehicle. To make matters even more complicated, both the vehicle prices and the cost of gas vary widely from one region to the next (over [$900 in some cases](https://www.businessinsider.com/how-much-the-average-person-spends-on-gas-in-every-state-2019-2)). To help connect car buyers with the best local deals and also empower them to broaden their search radius to find even better deals I built Stick-Shift. 
+
+# Solution Details:
+
+Stick-Shift is a scalable scraping system which combines car and gas prices by area with real-world fuel consumption data for every vehicle; users will instantly see the top 10 cheapest cars to buy and drive in their area, with the ability to ‘unzoom’ and see bargains in their wider geographic area!
 
 # Directory Structure:
 
