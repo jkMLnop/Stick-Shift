@@ -3,7 +3,7 @@ A tool to help car-buyers find the best deals in the country and inform them abo
 
 [Presentation link](https://docs.google.com/presentation/d/1wDi4mnvDYej3x5vrNPCKJv7Hc8r0qw_UOUuXyXFpN_w/edit#slide=id.p)
 
-Website: [stick-shift.ca](http://www.stick-shift.ca/)
+[Website](http://www.stick-shift.ca/)
 
 # Table of Contents
 1. [Problem](README.md#problem)
@@ -22,6 +22,10 @@ Stick-Shift is a scalable scraping system which combines car and gas prices by a
 # Directory Structure:
 
     ├── README.md 
+    ├── Database
+    │   └── create_car_listings_final.sql
+    │   └── create_car_mpgs_final.sql
+    │   └── create_gas_prices_final.sql
     ├── Web_Scraping
     │   └── active_proxies.csv
     │   └── filter_working_proxies.py
