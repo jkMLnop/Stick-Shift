@@ -21,7 +21,7 @@ The average American spent an average of [$1400](https://www.fool.com/investing/
 Stick-Shift is a scalable scraping system which combines car and gas prices by area with real-world fuel consumption data for every vehicle; users will instantly see the top 10 cheapest cars to buy and drive nation-wide with current annual fuel consumption estimates based on prices in their local area.
 
 ### Data Pipeline:
-![alt-text][pipeline]
+![alt text][pipeline]
 [pipeline]: https://github.com/jkMLnop/Stick-Shift/blob/master/pipeline_image.PNG "Stick-Shift Data Pipeline"
 
 # Directory Structure:
