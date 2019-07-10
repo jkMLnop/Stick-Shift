@@ -6,16 +6,10 @@ from flask import request
 import pandas as pd
 import psycopg2
 
-#TODO 1) FIX POST so it works! remove hardcoded zip code
-#TODO 4) Add fuel price dashboard functionality
-#TODO 5) HOW TO CAST FIELDS PROPERLY!!
-#TODO 6) ADD SQL Injection Prevention!
-
-#TODO REMOVE BEFORE PUSHING TO GITHUB!!!!
-user = 'postgres' #add your username here (same as previous postgreSQL)
-host = '107.20.54.125'
-dbname = 'fuel_consumption'
-password = 'postgres'
+user = ''
+host = ''
+dbname = ''
+password = ''
 
 db = create_engine('postgresql://%s:%s@%s/%s'%(user,password,host,dbname))
 
@@ -71,7 +65,6 @@ def main_page_fancy():
         query_results=pd.read_sql_query(sql_query,con)
         cars = []
 
-        #TODO 5) FIX
         for i in range(0,query_results.shape[0]):
             average_mpgs = query_results.iloc[i]['average_mpgs']
 
@@ -93,3 +86,8 @@ def main_page_fancy():
 @app.route('/landing')
 def landing():
   return render_template("landing_page.html")
+
+
+#TODO 1) FIX POST so it works! remove hardcoded zip code
+#TODO 4) Add fuel price dashboard functionality
+#TODO 6) ADD SQL Injection Prevention!
