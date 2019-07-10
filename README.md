@@ -1,5 +1,7 @@
 # Stick-Shift - *Kicking Car Buying into High Gear*
-A tool to help car-buyers find the best deals in the country and inform them about what they can expect to spend when they do![Presentation link](https://docs.google.com/presentation/d/1wDi4mnvDYej3x5vrNPCKJv7Hc8r0qw_UOUuXyXFpN_w/edit?usp=sharing).
+A tool to help car-buyers find the best deals in the country and inform them about what they can expect to spend when they do!
+
+[Presentation link](https://docs.google.com/presentation/d/1wDi4mnvDYej3x5vrNPCKJv7Hc8r0qw_UOUuXyXFpN_w/edit#slide=id.g5ca2dfa960_0_214)
 
 # Table of Contents
 1. [Problem](README.md#problem)
