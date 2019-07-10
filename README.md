@@ -1,5 +1,5 @@
-# Stick-Shift
-Stick-Shift webapp sources
+# Stick-Shift - *Kicking Car Buying into High Gear*
+A tool to help car-buyers find the best deals in the country and inform them about what they can expect to spend when they do![Presentation link](https://docs.google.com/presentation/d/1wDi4mnvDYej3x5vrNPCKJv7Hc8r0qw_UOUuXyXFpN_w/edit?usp=sharing).
 
 # Table of Contents
 1. [Problem](README.md#problem)
@@ -8,6 +8,7 @@ Stick-Shift webapp sources
 1. [Contact Information](README.md#contact-information)
 
 # Problem:
+
 
 # Directory Structure:
 
@@ -39,3 +40,4 @@ Stick-Shift webapp sources
 * Email:    konradkarolak87@gmail.com
 * LinkedIn: linkedin.com/in/konradkarolak
 * GitHub:   https://github.com/jkMLnop
+* Project Website: http://stick-shift.ca
