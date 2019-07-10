@@ -26,8 +26,14 @@ Stick-Shift is a scalable scraping system which combines car and gas prices by a
 [pipeline]: https://github.com/jkMLnop/Stick-Shift/blob/master/pipeline_image.PNG "Stick-Shift Data Pipeline"
 
 ### Data Sources:
-**Fuel consumption data:**
-[Scraped from fuelly.com](https://github.com/jkMLnop/Stick-Shift/blob/master/Web_Scraping/scrape_fuelly.py) once a week (for every unique make model year). This data is inserted into a postgres table called ['car_mpgs'](https://github.com/jkMLnop/Stick-Shift/blob/master/Database/create_car_mpgs_final.sql) which is keyed on URL, and has numeric MPG and Year fields.
+**Fuel Consumption Data:**
+[Scraped from fuelly.com](https://github.com/jkMLnop/Stick-Shift/blob/master/Web_Scraping/scrape_fuelly.py) once a week (for every unique make model year). This data is inserted into a postgres table called ['car_mpgs'](https://github.com/jkMLnop/Stick-Shift/blob/master/Database/create_car_mpgs_final.sql) which is keyed on URL, and has numeric MPG and Year fields. At last benchmark car_mpgs contained 18,558 unique models, with a total of 153,758 rows taking up a total of 37MB. 
+
+**Gas Price Information:**
+[Scraped from gasbuddy.com](https://github.com/jkMLnop/Stick-Shift/blob/master/Web_Scraping/scrape_gasbuddy.py) daily for [every US ZIP code](https://raw.githubusercontent.com/jkMLnop/Stick-Shift/master/Web_Scraping/us_zips.csv). This data is inserted into a postgres table called ['gas_prices'](https://github.com/jkMLnop/Stick-Shift/blob/master/Database/create_gas_prices_final.sql) which is keyed on ID (posting ID specifically), and has numeric ZIP, and gas_regular fields. 
+
+**Car Listings:**
+
 
 ### Proxies:
 
