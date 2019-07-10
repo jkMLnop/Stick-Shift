@@ -3,6 +3,8 @@ A tool to help car-buyers find the best deals in the country and inform them abo
 
 [Presentation link](https://docs.google.com/presentation/d/1wDi4mnvDYej3x5vrNPCKJv7Hc8r0qw_UOUuXyXFpN_w/edit#slide=id.p)
 
+Website: [stick-shift.ca](http://www.stick-shift.ca/)
+
 # Table of Contents
 1. [Problem](README.md#problem)
 1. [Solution Details](README.md#solution-details)
@@ -15,7 +17,7 @@ The average American spent an average of [$1400](https://www.fool.com/investing/
 
 # Solution Details:
 
-Stick-Shift is a scalable scraping system which combines car and gas prices by area with real-world fuel consumption data for every vehicle; users will instantly see the top 10 cheapest cars to buy and drive in their area, with the ability to ‘unzoom’ and see bargains in their wider geographic area!
+Stick-Shift is a scalable scraping system which combines car and gas prices by area with real-world fuel consumption data for every vehicle; users will instantly see the top 10 cheapest cars to buy and drive nation-wide with current annual fuel consumption estimates based on prices in their local area.
 
 # Directory Structure:
 
