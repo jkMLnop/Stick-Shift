@@ -26,8 +26,8 @@ Stick-Shift is a scalable scraping system which combines car and gas prices by a
 [pipeline]: https://github.com/jkMLnop/Stick-Shift/blob/master/pipeline_image.PNG "Stick-Shift Data Pipeline"
 
 ### Data Sources:
-Fuel consumption data:
-Scraped from fuelly.com once a week (for every unique make model year). This data is inserted into a postgres table called ['car_mpgs'](https://github.com/jkMLnop/Stick-Shift/blob/master/Database/create_car_mpgs_final.sql) which is keyed on URL, and has numeric MPG and Year fields.
+**Fuel consumption data:**
+[Scraped from fuelly.com](https://github.com/jkMLnop/Stick-Shift/blob/master/Web_Scraping/scrape_fuelly.py) once a week (for every unique make model year). This data is inserted into a postgres table called ['car_mpgs'](https://github.com/jkMLnop/Stick-Shift/blob/master/Database/create_car_mpgs_final.sql) which is keyed on URL, and has numeric MPG and Year fields.
 
 ### Proxies:
 
