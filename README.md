@@ -36,6 +36,11 @@ Stick-Shift is a scalable scraping system which combines car and gas prices by a
 
 **Car Listings:**
 
+[Scraped from craigslist.com](https://github.com/jkMLnop/Stick-Shift/blob/master/Web_Scraping/scrape_craigslist.py) daily. This data is inserted into a postgres table called ['car_listings'](https://github.com/jkMLnop/Stick-Shift/blob/master/Database/create_car_listings_final.sql) which is keyed on ID (again posting ID), and has numeric Price and Model Year fields. At last benchmark car_listings contained a total of 89,726 rows (unique listings) taking up a total of 23MB. 
+
+**US City ZIP Codes:**
+
+[Dowloaded from a database that maps US cities to ZIPs](https://simplemaps.com/data/us-cities), these data contain over 37,000 unique US Cities contained in a .CSV file 4.1MB in size.
 
 ### Proxies:
 **Proxy Rotation & User Agent Cycling:**
