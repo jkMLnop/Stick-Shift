@@ -40,13 +40,15 @@ Stick-Shift is a scalable scraping system which combines car and gas prices by a
 When making large ammounts of requests to a target site from same IP address in rapid succession we are likely to eventually get blocked by the server. In order to avoid this outcome both [Craigslist](https://github.com/jkMLnop/Stick-Shift/blob/master/Web_Scraping/scrape_craigslist.py) and [Gasbuddy](https://github.com/jkMLnop/Stick-Shift/blob/master/Web_Scraping/scrape_gasbuddy.py) scrapers rotate through a list of proxies and randomly cycle through user agents, appearing to the target site's server as distinct users accessing the site from various IPs and using various web browsers.  
 ![alt text][proxy_rotation]
 
+
 **Proxy IP Scraping & Testing:**
 The proxy list is obtained from a [Free Proxy List website](https://www.sslproxies.org/) by the [proxy scraping / testing program](https://github.com/jkMLnop/Stick-Shift/blob/master/Web_Scraping/filter_working_proxies.py). The proxy scraping program tests each proxy scraped from the proxy list page by making requests to http://icanhazip.com which returns the IP of the proxy from which it is recieving requests. If the proxy IP is successfully returned by icanhazip then we know the proxy is currently operational and it is written to [active_proxies.csv](https://github.com/jkMLnop/Stick-Shift/blob/master/Web_Scraping/active_proxies.csv).
 ![alt text][proxy_scraping]
 
 
+**Craigslist Routing & Workaround:**
+When we make requests of Craigslist using a proxy, craigslist returns us classifieds local to the proxy server's IP, therefore to circumvent this we need to make use of a [database that maps US cities to ZIPs](https://simplemaps.com/data/us-cities), and force craigslist to the specific URL of the target classified instead of letting it route us.
 ![alt text][craigslist_routing]
-
 
 [proxy_scraping]: https://github.com/jkMLnop/Stick-Shift/blob/master/proxy_scraping_image.PNG "Proxy Scraping Method"
 [proxy_rotation]: https://github.com/jkMLnop/Stick-Shift/blob/master/proxy_rotation_image.PNG "Proxy Rotation Rationale & Method"
