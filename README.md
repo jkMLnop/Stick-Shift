@@ -36,7 +36,14 @@ Stick-Shift is a scalable scraping system which combines car and gas prices by a
 
 
 ### Proxies:
+![alt text][proxy_scraping]
+![alt text][proxy_rotation]
+![alt text][craigslist_routing]
 
+
+[proxy_scraping]: https://github.com/jkMLnop/Stick-Shift/blob/master/proxy_scraping_image.PNG "Proxy Scraping Method"
+[proxy_rotation]: https://github.com/jkMLnop/Stick-Shift/blob/master/proxy_rotation_image.PNG "Proxy Rotation Rationale & Method"
+[craigslist_routing]: https://github.com/jkMLnop/Stick-Shift/blob/master/craigslist_routing.PNG "Craigslist Routing Workaround"
 # Directory Structure:
 
     ├── README.md 
