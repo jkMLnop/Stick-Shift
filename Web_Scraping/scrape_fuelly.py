@@ -6,6 +6,7 @@ import psycopg2
 from bs4 import BeautifulSoup
 from fake_useragent import UserAgent
 
+#Pulls all models for every make
 def makes():
     #begin timing (for ease of benchmarking)
     start = time.time()
@@ -39,6 +40,7 @@ def models(car_model_link):
     for model_year_link in all_model_year_links:
         years(model_year_link)
 
+#Pulls all model years available for every make and model of car
 def years(model_year_link):
     individual_car_data = {}
 
@@ -75,6 +77,7 @@ def years(model_year_link):
     #NOTE Can move this call to a model/make instead.. depends on implications
     db_write(individual_car_data)
 
+#write car mpg info to postgress
 def db_write(car_data):
     connection = psycopg2.connect(  host='',
                                     database='',
