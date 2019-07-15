@@ -82,10 +82,11 @@ Clone this repository using:
 ```
 git clone https://github.com/jkMLnop/Stick-Shift
 ```
-Then execute the [node flask setup script](https://github.com/jkMLnop/Stick-Shift/blob/master/Flask_WebApp/node_flask_setup.sh) using the following command while in the Flask_WebApp folder:
+Then execute the [node scraper setup script](https://github.com/jkMLnop/Stick-Shift/blob/master/Web_Scraping/node_scraper_setup.sh) using the following command while in the Web_Scraping folder:
 ```
-bash node_flask_setup.sh
+bash node_scraper_setup.sh
 ```
+
 
 **Flask Web Server Setup:**
 
@@ -94,9 +95,9 @@ Clone this repository using:
 ```
 git clone https://github.com/jkMLnop/Stick-Shift
 ```
-Then execute the [node scraper setup script](https://github.com/jkMLnop/Stick-Shift/blob/master/Web_Scraping/node_scraper_setup.sh) using the following command while in the Web_Scraping folder:
+Then execute the [node flask setup script](https://github.com/jkMLnop/Stick-Shift/blob/master/Flask_WebApp/node_flask_setup.sh) using the following command while in the Flask_WebApp folder:
 ```
-bash node_scraper_setup.sh
+bash node_flask_setup.sh
 ```
 
 
