@@ -78,7 +78,6 @@ def main_page_fancy():
 
 @app.route('/')
 @app.route('/index')
-
 @app.route('/landing')
 def landing():
   return render_template("landing_page.html")
