@@ -44,6 +44,9 @@ Stick-Shift is a scalable scraping system which combines car and gas prices by a
 
 ### Database Schema:
 
+![alt text][database_schema]
+
+[database_schema]: https://github.com/jkMLnop/Stick-Shift/blob/master/database_schema.PNG "Database Schema"
 
 
 ### Proxies:
