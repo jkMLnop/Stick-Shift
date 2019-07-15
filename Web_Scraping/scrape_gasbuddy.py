@@ -34,8 +34,6 @@ def import_zip_list():
     location_info = {x:y for x,y in zip(zip_code,city)}
     return location_info
 
-    #TODO update this later to obtain range of all ZIP/cities within x mile radius of user's search
-
 def scrape_by_location(zip_code, city, current_proxy_number, proxy_count, proxy_list, request_count):
     prices_ua = UserAgent()
     prices_url = 'https://www.gasbuddy.com/home?search=' + str(zip_code) + '&fuel=1'      #EXAMPLE URL: https://www.gasbuddy.com/home?search=10001&fuel=1
@@ -44,11 +42,6 @@ def scrape_by_location(zip_code, city, current_proxy_number, proxy_count, proxy_
 
     max_attempts = 5                #NOTE arbitrarily set this value. Update later!
     proxy_rotation_interval = 15    #NOTE also arbitrarily set also subject to change
-
-    #TODO START HERE:
-        #1) push to AWS
-        #2) run on AWS without issues!
-        #3) implement boto3 S3 bucket writing functionality
 
     for failed_attempts in range(max_attempts):
         #iterate to next proxy once proxy rotation interval has been exceeded
@@ -62,7 +55,6 @@ def scrape_by_location(zip_code, city, current_proxy_number, proxy_count, proxy_
         proxy_info = {'http': 'http://'+ proxy_list[current_proxy_number]['ip'] + ':' + proxy_list[current_proxy_number]['port']}
 
         try:    #
-            #print("attempting to connect to: " + str(prices_url)) #TODO REMOVE FOR PROD
             prices_page = requests.get(prices_url, headers = {'user-agent':prices_ua.random}, proxies = proxy_info, timeout = 5)
             prices_soup = BeautifulSoup(prices_page.content,'lxml')
             prices_h3_container = prices_soup.find_all('h3', class_= "header__header3___1b1oq header__header___1zII0 header__snug___lRSNK GenericStationListItem__stationNameHeader___3qxdy")
@@ -72,9 +64,8 @@ def scrape_by_location(zip_code, city, current_proxy_number, proxy_count, proxy_
                 station_name = indidividual_posting.string
                 station_price_reg = indidividual_posting.find_next('span', class_ = "GenericStationListItem__price___3GpKP").string
                 station_address = indidividual_posting.find_next('div', class_ = "GenericStationListItem__address___1VFQ3").get_text(" ")   #NOTE adress broken up by <br/> used get_text to join text segments on a space!
-                station_distance = indidividual_posting.find_next('div', class_ = "StationDistance__distanceContainer___3JFP6").string  #TODO Is this the distance from ZIP... how is it extracted?
+                station_distance = indidividual_posting.find_next('div', class_ = "StationDistance__distanceContainer___3JFP6").string
 
-                #TODO FIX THIS LATER
                 try:
                     station_link = indidividual_posting.find_next('div', class_ = "GenericStationListItem__mainInfoColumn___2kuPq GenericStationListItem__column___2Yqh-").find_next('a').get('href')
                     station_id = station_link[(station_link.find('/station/') + 9):]
@@ -86,7 +77,7 @@ def scrape_by_location(zip_code, city, current_proxy_number, proxy_count, proxy_
 
                 station_zip = zip_code
 
-                #clears last updated for stations where price is not known - TODO possibly exclude these later??
+                #clears last updated for stations where price is not known 
                 if "---" not in str(station_price_reg):
                     station_last_update = indidividual_posting.find_next('span', class_ = "ReportedBy__postedTime___J5H9Z").string
                 else:
@@ -98,15 +89,12 @@ def scrape_by_location(zip_code, city, current_proxy_number, proxy_count, proxy_
                                             'station_distance'  : station_distance,
                                             'station_url'       : station_url,
                                             'station_zip'       : station_zip}
-                                            #TODO add the station last update field here!
-
-                #print("current station's info: " + str(station_info[station_id]))   #TODO REMOVE FOR PROD
-            #print("connected successfully: " + str(prices_page))   #TODO REMOVE FOR PROD
+            
             request_count += 1
             failed_attempts = max_attempts #NOTE set failed_attempts to max_attempts so loop terminates instead of making further requests upon successful connection!
             break
 
-        except Exception as e:  # If error, cycle to next proxy and reset request count for that proxy to 0 TODO make more specific error conditions!!
+        except Exception as e:  # If error, cycle to next proxy and reset request count for that proxy to 0
             if current_proxy_number < (proxy_count - 1):
                 current_proxy_number += 1
             elif current_proxy_number == (proxy_count - 1):
@@ -116,9 +104,6 @@ def scrape_by_location(zip_code, city, current_proxy_number, proxy_count, proxy_
             failed_attempts += 1
             print("connection error _" + str(e) + "_ encountered at station link: " +  str(station_link) + " and station id: "+ str(station_last_update) + ", rotating to proxy number: " + str(current_proxy_number))   #NOTE might keep for error trapping..
 
-            #TODO Possibly add proxy deletion capacity here
-    #TODO Add empty listing/failed connection > 5 handling logic here.. (eg ZIP doesnt exist..)
-    #print("current proxy number: " + str(current_proxy_number) + " current request count: " + str(request_count))  #TODO REMOVE FOR PROD
     return current_proxy_number, request_count, station_info
 
 def write_to_file(listing_info):
