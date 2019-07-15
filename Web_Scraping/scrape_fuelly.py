@@ -62,12 +62,10 @@ def years(model_year_link):
         try:
             float(individual_mpg)
         except ValueError:
-            print('NON-NUMERIC MPG: ' + individual_mpg +' FOUND AT: ' + individual_url) #TODO UNCOMMENT FOR ACTUAL TEST!
             continue
 
         #filtering out non-numeric mpgs
         if individual_year.isnumeric() == False:
-            print('NON-NUMERIC YEAR: ' + individual_year +' FOUND AT: ' + individual_url) #TODO UNCOMMENT FOR ACTUAL TEST!
             continue
 
         #Store Individual Car Data into a Dict Where URL is Key and MPG is Value
@@ -81,7 +79,7 @@ def db_write(car_data):
     connection = psycopg2.connect(  host='',
                                     database='',
                                     user='',
-                                    password = '') #TODO GITIGNORE THIS!
+                                    password = '')
 
     cursor = connection.cursor()
 
