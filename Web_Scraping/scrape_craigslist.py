@@ -6,6 +6,7 @@ import psycopg2
 from bs4 import BeautifulSoup
 from fake_useragent import UserAgent
 
+# Reads in list of active proxies to rotate through downstream
 def import_proxy_list():
     active_proxies = []
 
@@ -28,6 +29,7 @@ def import_proxy_list():
     except IOError:
         print('ERROR: Input File I/O Error - Proxy List')
 
+# Reads in database of cross-mapped US citires and ZIP codes
 def import_zip_list():
     try:
         with open('us_zips.csv', mode = 'r') as zip_code_file:
@@ -41,6 +43,7 @@ def import_zip_list():
 
     return location_info
 
+# scrapes craigslist by iterating through us_zips.csv on city ZIP code
 def scrape_by_location(zip_code, city, current_proxy_number, proxy_count, proxy_list, request_count):
     listings_ua = UserAgent()
     listings_url = 'https://' + "".join(city.split(" ")).lower() + '.craigslist.org/search/cta?postal=' + str(zip_code)
@@ -97,8 +100,6 @@ def scrape_by_location(zip_code, city, current_proxy_number, proxy_count, proxy_
                 elif int(post_price) == 12345:
                     continue
 
-                # print("listing info before pg2 scrape:")
-                # print(listing_info)
                 post_model_year, post_make, post_model, post_thumbnail_url = scrape_pg_2(post_url, proxy_info)
                 print("Updated year/make/model is : " + str(post_model_year) + " " + str(post_make) + " " + str(post_model) + " car thumbnail url is: " + str(post_thumbnail_url))
 
@@ -110,7 +111,7 @@ def scrape_by_location(zip_code, city, current_proxy_number, proxy_count, proxy_
 
             break
       
-        except Exception as error_message: # If error, cycle to next proxy and reset request count for that proxy to 0 TODO make more specific error conditions!!
+        except Exception as error_message: # If error, cycle to next proxy and reset request count for that proxy to 0
             if current_proxy_number < (proxy_count - 1):
                 current_proxy_number += 1
             elif current_proxy_number == (proxy_count - 1):
@@ -121,6 +122,7 @@ def scrape_by_location(zip_code, city, current_proxy_number, proxy_count, proxy_
             
     return current_proxy_number, request_count, listing_info
 
+# scrapes individual listing pages of each post on front page to obtain thumbnail image link and consistent car make model year info
 def scrape_pg_2(post_url, proxy_info):
     pg2_ua = UserAgent()
     pg2_url = post_url
