@@ -104,5 +104,4 @@ When we make requests of Craigslist using a proxy, craigslist returns us classif
 # Contact Information:
 * Email:    konradkarolak87@gmail.com
 * LinkedIn: linkedin.com/in/konradkarolak
-* GitHub:   https://github.com/jkMLnop
 * Project Website: http://stick-shift.ca
