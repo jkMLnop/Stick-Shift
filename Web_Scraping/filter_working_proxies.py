@@ -58,11 +58,9 @@ def write_active_proxy_list(active_proxies):
                 )
 
     except IOError:
-        print("I/O ERROR: file not found!") #TODO this error doesnt work.. fix it!
+        print("I/O ERROR: file not found!") 
 
     return
-
-#TODO 4) will have to update scrapers to read into array a list of working proxies and to rotate through them and remove dead ones also!
 
 proxy_list = scrape_proxies()
 active_proxies = test_proxies(proxy_list)
