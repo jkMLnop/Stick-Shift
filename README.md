@@ -42,6 +42,10 @@ Stick-Shift is a scalable scraping system which combines car and gas prices by a
 
 [Dowloaded from a database that maps US cities to ZIPs](https://simplemaps.com/data/us-cities), these data contain over 37,000 unique US Cities contained in a .CSV file 4.1MB in size.
 
+### Database Schema:
+
+
+
 ### Proxies:
 **Proxy Rotation & User Agent Cycling:**
 
@@ -63,6 +67,7 @@ When we make requests of Craigslist using a proxy, craigslist returns us classif
 [proxy_scraping]: https://github.com/jkMLnop/Stick-Shift/blob/master/proxy_scraping_image.PNG "Proxy Scraping Method"
 [proxy_rotation]: https://github.com/jkMLnop/Stick-Shift/blob/master/proxy_rotation_image.PNG "Proxy Rotation Rationale & Method"
 [craigslist_routing]: https://github.com/jkMLnop/Stick-Shift/blob/master/craigslist_routing.PNG "Craigslist Routing Workaround"
+
 # Directory Structure:
 
     ├── README.md 
