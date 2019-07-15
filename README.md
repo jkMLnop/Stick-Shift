@@ -73,10 +73,23 @@ When we make requests of Craigslist using a proxy, craigslist returns us classif
 [craigslist_routing]: https://github.com/jkMLnop/Stick-Shift/blob/master/craigslist_routing.PNG "Craigslist Routing Workaround"
 
 # Installation:
+General Note: all pipeline components were part of the same VPC.
 
 **Scraper Node Setup:**
 
-For the three scraper nodes, use of a m4 large instance with ubuntu linux 16.04 LTS or higher is assumed. 
+For the three scraper nodes, use of a m4 large instance with ubuntu linux 18.04 LTS or higher is assumed. 
+Clone this repository using: 
+```
+git clone https://github.com/jkMLnop/Stick-Shift
+```
+Then execute the [node flask setup script](https://github.com/jkMLnop/Stick-Shift/blob/master/Flask_WebApp/node_flask_setup.sh) using the following command while in the Flask_WebApp folder:
+```
+bash node_flask_setup.sh
+```
+
+**Flask Web Server Setup:**
+
+For the web server use of a t2 micro instance with ubuntu linux 18.04 LTS or higher is assumed.
 Clone this repository using: 
 ```
 git clone https://github.com/jkMLnop/Stick-Shift
@@ -85,6 +98,7 @@ Then execute the [node scraper setup script](https://github.com/jkMLnop/Stick-Sh
 ```
 bash node_scraper_setup.sh
 ```
+
 
 # Directory Structure:
 
