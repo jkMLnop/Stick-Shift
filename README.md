@@ -8,6 +8,7 @@ A tool to help car-buyers find the best deals in the country and inform them abo
 # Table of Contents
 1. [Problem](README.md#problem)
 1. [Solution](README.md#solution)
+1. [Installation](README.md#installation)
 1. [Directory Structure](README.md#directory-structure)
 1. [Contact Information](README.md#contact-information)
 
@@ -70,6 +71,13 @@ When we make requests of Craigslist using a proxy, craigslist returns us classif
 [proxy_scraping]: https://github.com/jkMLnop/Stick-Shift/blob/master/proxy_scraping_image.PNG "Proxy Scraping Method"
 [proxy_rotation]: https://github.com/jkMLnop/Stick-Shift/blob/master/proxy_rotation_image.PNG "Proxy Rotation Rationale & Method"
 [craigslist_routing]: https://github.com/jkMLnop/Stick-Shift/blob/master/craigslist_routing.PNG "Craigslist Routing Workaround"
+
+# Installation:
+
+**Scraper Node Setup:**
+
+For the three scraper nodes, use of a m4 large instance with ubuntu linux 16.04 LTS or higher is assumed. 
+        Clone this repository using: ```git clone https://github.com/jkMLnop/Stick-Shift```
 
 # Directory Structure:
 
