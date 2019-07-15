@@ -77,7 +77,14 @@ When we make requests of Craigslist using a proxy, craigslist returns us classif
 **Scraper Node Setup:**
 
 For the three scraper nodes, use of a m4 large instance with ubuntu linux 16.04 LTS or higher is assumed. 
-        Clone this repository using: ```git clone https://github.com/jkMLnop/Stick-Shift```
+Clone this repository using: 
+```
+git clone https://github.com/jkMLnop/Stick-Shift
+```
+Then execute the [node scraper setup script](https://github.com/jkMLnop/Stick-Shift/blob/master/Web_Scraping/node_scraper_setup.sh) using the following command while in the Web_Scraping folder:
+```
+bash node_scraper_setup.sh
+```
 
 # Directory Structure:
 
