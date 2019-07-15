@@ -23,15 +23,11 @@ con = psycopg2.connect( host=host,
 
 print("psycopg2 connection made")
 
-#TODO (STRETCH) MAKE RESULTS COUNT DYNAMIC FROM A DROPDOWN?
 @app.route('/main_page', methods = ['POST'] )
 def main_page_fancy():
     if request.method == 'POST':
-        #pull 'zip' from input field and store it
-        #TODO 1) FIX:
-        #location = request.args.get('zip_code')
-        #print("location is: " + str(location))
-        location = 10001    #TODO 1) REMOVE
+        #pull 'zip' from input field and store it as location
+        location = request.form.get('zip_code')
         default_distance = 12000 #Average miles driven / yr
 
         query_gas_on_zip =  """
@@ -43,8 +39,7 @@ def main_page_fancy():
         station_url = query_gas_result.iloc[0]['url']
         print("best gas price: " + str(min_local_gas_price))
 
-        #TODO (STRETCH GOAL) MAKE QUERY FLEXIBLE ON PRICE AND ON LIMIT AND ON DISTANCE!
-        #NOTE sub-$500 posts appear to be mostly leases, therefore excluded them!
+        #NOTE sub-$500 posts appear to be mostly leases, therefore excluded them
         sql_query = """
                     SELECT mpg.make, mpg.model, mpg.year, cl.price AS asking_price,
                     cl.date AS posting_date,
@@ -83,11 +78,7 @@ def main_page_fancy():
 
 @app.route('/')
 @app.route('/index')
+
 @app.route('/landing')
 def landing():
   return render_template("landing_page.html")
-
-
-#TODO 1) FIX POST so it works! remove hardcoded zip code
-#TODO 4) Add fuel price dashboard functionality
-#TODO 6) ADD SQL Injection Prevention!
