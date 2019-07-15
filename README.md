@@ -43,7 +43,7 @@ Stick-Shift is a scalable scraping system which combines car and gas prices by a
 [Dowloaded from a database that maps US cities to ZIPs](https://simplemaps.com/data/us-cities), these data contain over 37,000 unique US Cities contained in a .CSV file 4.1MB in size.
 
 ### Database Schema:
-
+Database is broken up into the three tables described above (['car_listings'](https://github.com/jkMLnop/Stick-Shift/blob/master/Database/create_car_listings_final.sql), ['gas_prices'](https://github.com/jkMLnop/Stick-Shift/blob/master/Database/create_gas_prices_final.sql) and ['car_mpgs'](https://github.com/jkMLnop/Stick-Shift/blob/master/Database/create_car_mpgs_final.sql))
 ![alt text][database_schema]
 
 [database_schema]: https://github.com/jkMLnop/Stick-Shift/blob/master/database_schema.PNG "Database Schema"
