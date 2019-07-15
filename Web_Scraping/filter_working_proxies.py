@@ -26,21 +26,18 @@ def scrape_proxies():
 def test_proxies(proxy_list):
     ip_url = 'http://icanhazip.com'
 
-    #TODO ADRI SAYS: Change this to go through the proxy list instead of using index - python not optimized for iterating with indexes!
     #for current_proxy in proxy_list:
-    for n in range (len(proxy_list)-1):    #TODO possibly fix this? index out of bounds error encountered towards the end of it
+    for n in range (len(proxy_list)-1): 
         current_proxy = proxy_list[n]
         proxy_info = {'http': 'http://'+ current_proxy['ip'] + ':' + current_proxy['port']}
 
         #Test each SSL proxy 10x to see if its still active
-        for n in range(10):    #TODO Get Feedback, 1) is 10 requests good? 2) is using icanhazip even relevant? 3) test on scrape target?
+        for n in range(10):    
             try:
                 proxy_ip = requests.get(ip_url, proxies = proxy_info)
-                #TODO ADRI SAYS: append to a new list of working proxies instead of deleting from current
             except: # If error, delete this proxy and find another
-                #TODO add some kind of error logging to better identify when its being rejected/blocked by server
                 print('Proxy ' + current_proxy['ip'] + ':' + current_proxy['port'] + ' deleted.')
-                del proxy_list[n]   #TODO ADRI SAYS: remove once you add append to new list functionality above
+                del proxy_list[n]
 
         return  proxy_list
 
