@@ -5,6 +5,7 @@ import time
 from bs4 import BeautifulSoup
 from fake_useragent import UserAgent
 
+#Pull proxy info from active_proxies.csv to rotate through while scraping gasbuddy
 def import_proxy_list():
     active_proxies = []
 
@@ -27,6 +28,7 @@ def import_proxy_list():
     except IOError:
         print('ERROR: INPUT File I/O Error')
 
+#Pull ZIPs from us_zips.csv to scrape local gas prices on gasbuddy by ZIP        
 def import_zip_list():
     #NOTE this assumes that zip codes for a given city will be concurrent.. Might need to change later
     zip_code = range(10001,11700)
@@ -34,6 +36,7 @@ def import_zip_list():
     location_info = {x:y for x,y in zip(zip_code,city)}
     return location_info
 
+#pull local gas prices from gasbuddy by ZIP code (location)
 def scrape_by_location(zip_code, city, current_proxy_number, proxy_count, proxy_list, request_count):
     prices_ua = UserAgent()
     prices_url = 'https://www.gasbuddy.com/home?search=' + str(zip_code) + '&fuel=1'      #EXAMPLE URL: https://www.gasbuddy.com/home?search=10001&fuel=1
@@ -82,7 +85,8 @@ def scrape_by_location(zip_code, city, current_proxy_number, proxy_count, proxy_
                     station_last_update = indidividual_posting.find_next('span', class_ = "ReportedBy__postedTime___J5H9Z").string
                 else:
                     station_last_update = "---"
-
+                
+                #writes station information into dictionary keyed on station ID for later retrieval during db write
                 station_info[station_id] = {'station_name'      : station_name,
                                             'station_price_reg' : station_price_reg,
                                             'station_address'   : station_address,
@@ -106,6 +110,7 @@ def scrape_by_location(zip_code, city, current_proxy_number, proxy_count, proxy_
 
     return current_proxy_number, request_count, station_info
 
+#writes gas information to CSV
 def write_to_file(listing_info):
     try:
         with open('recent_gas_prices.csv', 'a') as outfile:
