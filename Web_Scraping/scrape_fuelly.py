@@ -66,7 +66,7 @@ def years(model_year_link):
         except ValueError:
             continue
 
-        #filtering out non-numeric mpgs
+        #filtering out non-numeric years
         if individual_year.isnumeric() == False:
             continue
 
